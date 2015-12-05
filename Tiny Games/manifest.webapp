@@ -1,0 +1,20 @@
+{
+  "name": "Tiny Games",
+  "description": "A bunch of tiny interesting games",
+  "launch_path": "/index.html",
+  "icons": {
+    "512": "/img/icon-512.png",
+    "128": "/img/icon-128.png"
+  },
+  "developer": {
+    "name": "Mani Kumar Reddy K",
+    "url": "http://hackerspack.wordpress.com"
+  },
+  "default_locale": "en",
+  "chrome": { "navigation": true },
+  "permissions": {
+   "audio-channel-content":{
+    "description":"Use the audio channel for the ping"
+   }
+  }
+}

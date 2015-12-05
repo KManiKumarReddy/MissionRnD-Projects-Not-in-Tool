@@ -1,0 +1,28 @@
+<html>
+	<head>
+		<title>High or Low</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1">
+		<link rel="stylesheet" href = "style.css">
+		<!-- Include the jQuery library -->
+		<script src="jquery-1.11.3.min.js"></script>
+		<!-- Include the jQuery Mobile library -->
+		<script src="jquery.mobile-1.4.5.min.js"></script>
+	</head>
+	<body>
+		<div class = "container">
+			<h1>High or Low</h1>
+			<p>Swipe right if new number is bigger</p>
+			<p>Swipe left if new number is smaller</p>
+			<button id = "displaynum"></button>
+			<p>Swipe right on number to continue</p>
+			<h2 id = "timeup">Time up!</h2>
+			<h2 id = "result"></h2>
+			<a href="#" id="reload">RESTART</a>
+			<p>Score high in 15 seconds</p>
+			<!--<audio id="ping" src="/music/audio.mp3" preload="auto" controls hidden></audio>-->
+		</div>
+		<span id = "prevnum" hidden>0</span>
+		<script src = "code.js"></script>
+	</body>
+</html>
