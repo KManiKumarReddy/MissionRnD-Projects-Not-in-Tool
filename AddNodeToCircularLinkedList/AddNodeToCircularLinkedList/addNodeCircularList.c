@@ -3,89 +3,97 @@
 #define MAX 15
 
 struct testCases {
-	int a[MAX], n1, b[MAX], n2, r[MAX], n;
+	int a[MAX], n, value, index, r[MAX], rSize;
 }cases[] = {
 	{
-		{ 1, 2, 3, 4, 5 }, 5,{ 1, 2, 3, 4, 5 }, 5,{ 1, 1, 2, 2, 3, 3, 4, 4, 5, 5 }, 10
+		{ 1, 2, 3, 4, 5 }, 5, 6, 5,{ 1, 2, 3, 4, 5, 6 }, 6
 	},
 	{
-		{ 1, 3, 5, 7 }, 4,{ 2, 4, 6, 8 }, 4,{ 1, 2, 3, 4, 5, 6, 7, 8 }, 8
+		{ 1, 2, 3, 4, 5 }, 5, -1, 0,{ -1, 1, 2, 3, 4, 5 }, 6
 	},
 	{
-		{ 1, 2, 3, 4, 5, 6 }, 6,{ 1, 2, 3, 4, 5 }, 5,{ 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6 }, 11
+		{ 1, 2, 4, 5 }, 4, 3, 2,{ 1, 2, 3, 4, 5 }, 5
 	},
 	{
-		{ 1, 2, 3, 4, 5 }, 5,{ 1, 2, 2, 4, 5, 6 }, 6,{ 1, 1, 2, 2, 2, 3, 4, 4, 5, 5, 6 }, 11
+		{ -1 }, 0, 25, 0,{ 25 }, 1
 	},
 	{
-		{ -5, -4, -3, -2, -1 }, 5,{ 0, 1, 2, 3, 4, 5 }, 6,{ -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5 }, 11
+		{ -1 }, 1, 25, 0,{ 25, -1 }, 2
 	},
 	{
-		{ 1 }, 1,{ -1 }, 0,{ 1 }, 1
-	},
-	{
-		{ -1 }, 0,{ 1 }, 1,{ 1 }, 1
-	},
-	{
-		{ -1 }, 0,{ -1 }, 0,{ -1 }, 0
+		{ -1 }, 1, 25, 1,{ -1, 25 }, 2
 	}
 };
 
 struct node {
-	int n;
+	int data;
 	struct node *next;
 };
 
-struct node * merge(struct node * a, struct node *b) {
-	struct node* result = NULL;
-	// returning a list if otehr list is empty
-	if (a == NULL)
-		return b;
-	if (b == NULL)
-		return a;
-	// if a is smaller, taking it as head and sorting the remaining list
-	if (a->n <= b->n) {
-		result = a;
-		result->next = merge(a->next, b);
+struct node * insertAtIndex(struct node * head, int data, int index) {
+	struct node* newNode = malloc(sizeof(struct node));
+	newNode->data = data;
+	// returning circular list with single element in case of empty list
+	if (!head) {
+		newNode->next = newNode;
+		return newNode;
 	}
-	// if b is smaller, taking it as head and sorting the remaining list
-	else {
-		result = b;
-		result->next = merge(a, b->next);
+	struct node *temp = head;
+	// inserting at beginning
+	if (!index) {
+		newNode->next = head;
+		while (temp->next != head)
+			temp = temp -> next;
+		temp->next = newNode;
+		return newNode;
 	}
-	return result;
+	// inserting and any index
+	while (--index)
+		temp = temp->next;
+	struct node *temp1 = temp->next;
+	temp->next = newNode;
+	newNode->next = temp1;
+	return head;
 }
 
 // creates linked list of elements from array
 struct node * createList(int *list, int n) {
-	struct node * head = NULL;
+	int i = n;
+	struct node * head = NULL, *tail = NULL;
 	while (n--) {
 		struct node *temp = (struct node *)malloc(sizeof(struct node));
 		temp->next = head;
-		temp->n = list[n];
+		temp->data = list[n];
 		head = temp;
+		if (n == i - 1) {
+			tail = temp;
+		}
 	}
+	if(tail)
+		tail->next = head;
 	return head;
 }
 
-int compareLists(struct node * a, struct node * b) {
-	while (a && b && a->n == b->n) {
+int compareLists(struct node * a, struct node * b, int n) {
+	if (!n)
+		return a == NULL;
+	while (n-- && a && b && a->data == b->data) {
 		a = a->next;
 		b = b->next;
 	}
-	return !(a || b);
+	return a->data == b->data;
 }
 
 void tester(int n) {
 	int i;
 	for (i = 0; i < n; i++)
-		if (compareLists(merge(createList(cases[i].a, cases[i].n1), createList(cases[i].b, cases[i].n2)), createList(cases[i].r, cases[i].n)))
+		if (compareLists(insertAtIndex(createList(cases[i].a, cases[i].n), cases[i].value, cases[i].index), createList(cases[i].r, cases[i].rSize), cases[i].rSize))
 			printf("PASS\n");
 		else
 			printf("FAIL\n");
 }
 
 int main(void) {
-	tester(8);
+	tester(6);
 	getchar();
 }
